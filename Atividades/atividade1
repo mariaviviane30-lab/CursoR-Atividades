@@ -1,1 +1,67 @@
-
+#Residente: Maria Viviane da Costa Pereira#
+#Matrícula: 25013461#
+#Atividade-Curso R#
+#EXERCÍCIOS
+1.#
+#Criando um vetor desodernado#
+notas_desordenadas<-c(8.5, 7.0, 9.2, 6.8, 8.0, 7.5, 9.0, 5.5, 8.8, 7.2)
+#Ordem crescente#
+sort(notas_desordenadas)
+#Ordem decrescente#
+rev(sort(notas_desordenadas))
+#Estatística#
+#Media das notas#
+mean(notas_desordenadas)
+#Mediana das notas#
+median(notas_desordenadas)
+#Nota minima#
+min(notas_desordenadas)
+#Nota maxima#
+max(notas_desordenadas)
+#Desvio padrao das notas#
+sd(notas_desordenadas)
+#Criar uma tabela de frequencia das notas#
+table(c(notas_desordenadas))
+#Criando um vetor de notas arredondadas#
+notas_arredondadas <- c(8.5, 7.0, 9.2, 6.8, 8.0, 7.5, 9.0, 5.5, 8.8, 7.2)
+round(notas_arredondadas, digits = 0)
+#Media das notas arredondadas#
+mean(round(notas_arredondadas))
+####Exercicio
+2.####
+#Carregar o conjunto de dados#
+data("mtcars")
+#Explorar a estrutura dos dados#
+str(mtcars)
+#Obter informações básicas sobre as variáveis#
+# Install dplyr if not already installed
+if (!requireNamespace("dplyr", quietly = TRUE)) {
+  install.packages("dplyr", dependencies = TRUE, repos = "
+}
+library(dplyr)
+glimpse(mtcars)
+#Variável numérica e Calcular estatísticas descritivas#
+#Estatísticas#
+mean(mtcars$mpg)
+median(mtcars$mpg)
+sd(mtcars$mpg)
+min(mtcars$mpg)
+max(mtcars$mpg)
+#Ordenação dos dados#
+#Ordem crescente#
+sort(mtcars$hp)
+http://cran.us.r-project.org")
+# Ordem decrescente#
+rev(sort(mtcars$hp))
+#Criar sequências#
+#De 1 a 10 com incremento 2#
+seq(1, 10, by = 2)
+#De 5 a 15 com incremento 3#
+seq(5, 15, by = 3)
+#Repetição de elementos#
+rep(7, times = 4)
+rep("a", times = 10)
+#Maiúsculas e minúsculas#
+cyl_texto <- as.character(mtcars$cyl)
+toupper(cyl_texto)
+tolower(cyl_texto)
