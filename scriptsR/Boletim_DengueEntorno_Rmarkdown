@@ -1,0 +1,270 @@
+---
+title: "Boletim Epidemiológico de Dengue no entorno do DF, 2023"
+author: "Maria Viviane"
+date: "2026-06-23"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE
+)
+
+load("~/Boletim_Dengue_Entorno_2023.RData")
+
+library(dplyr)
+library(ggplot2)
+library(gt)
+library(knitr)
+library(lubridate)
+```
+
+# Introdução
+
+A dengue é uma doença infecciosa febril aguda causada por vírus do gênero Flavivirus e transmitida principalmente pela picada da fêmea do mosquito Aedes aegypti. Considerada um importante problema de saúde pública, a doença apresenta ampla distribuição no território brasileiro, com ocorrência de surtos e epidemias associados a fatores ambientais, climáticos, demográficos e às condições de circulação viral.
+
+No Brasil, os casos de dengue tem tido um aumento expressivo nos casos de dengue. Esse aumento impacta nos serviços de saúde que causa alta demanda e sobrecarga, afetando diretamente a qualidade de vida da população.
+
+Os municípios que compõem a Região Integrada de Desenvolvimento do Distrito Federal e Entorno (RIDE-DF) apresentam intensa mobilidade populacional e forte integração socioeconômica com o Distrito Federal, fatores que podem favorecer a disseminação de arboviroses e influenciar o comportamento epidemiológico da dengue na região.
+
+Dessa forma, o presente boletim tem como objetivo descrever o perfil epidemiológico dos casos de dengue notificados nos municípios do Entorno do Distrito Federal no ano de 2023, considerando características demográficas, distribuição espacial, evolução temporal e aspectos relacionados à classificação e evolução dos casos.
+
+# Metodologia
+
+Trata-se de um estudo descritivo, no qual foram analisados os registros de dengue provenientes do Sistema de Informação de Agravos de Notificação (SINAN), referentes aos municípios do Entorno do Distrito Federal no período de janeiro a dezembro de 2023.
+
+Foram incluídos no estudo os municípios do estado de Goiás localizados no Entorno do Distrito Federal: Águas Lindas de Goiás, Cidade Ocidental, Cristalina, Formosa, Luziânia, Novo Gama, Padre Bernardo, Planaltina de Goiás, Santo Antônio do Descoberto e Valparaíso de Goiás.
+
+Os dados foram obtidos por meio da plataforma DATASUS, utilizando o pacote microdatasus no software R. As análises realizadas das variáveis foram relacionadas as características demográficas dos casos (sexo e faixa etária), distribuição por município, evolução temporal segundo mês de início dos sintomas, classificação final, crityério de confirmação, hospitalização e evolução dos casos.
+
+Os resultados foram organizados em tabelas e gráficos com a utilização do software R (VERSÃO 4.6.0), sendo apresentadaas frequência absolutas e relativas para a descrição do perfil epidemiológico da dengue nos municípios analisados.
+
+# 3. Resultados
+
+## 3.1 Distribuição dos casos por município
+
+```{r}
+casos_entorno_tabela
+```
+
+Foram registrados 10.236 casos de dengue nos municípios do Entorno do Distrito Federal em 2023. Observou-se maior concentração de casos em Águas Lindas de Goiás (3.092 casos), seguida por Luziânia (1.927 casos), Novo Gama (1.871 casos) e Formosa (1.523 casos). Os municípios com menor número de casos registrados foram Cidade Ocidental (33 casos), Padre Bernardo (79 casos) e Cristalina (157 casos).
+
+```{r grafico_municipios, fig.width=9, fig.height=6}
+ggplot(casos_entorno_tabela,
+       aes(x = reorder(Municipio, Casos),
+           y = Casos)) +
+  geom_col(fill = "#2C7FB8") +
+  geom_text(
+    aes(label = Casos),
+    hjust = -0.2,
+    size = 3
+  ) +
+  coord_flip() +
+  scale_y_continuous(
+    expand = expansion(mult = c(0, 0.15))
+  ) +
+  labs(
+    title = "Casos de dengue por municípios do Entorno do Distrito Federal, 2023",
+    x = "Município",
+    y = "Número de casos"
+  ) +
+  theme_minimal()
+```
+
+## 3.2 Distribuição dos casos por sexo
+
+```{r}
+sexo
+```
+
+Quanto ao sexo, observou-se predominância de casos no sexo feminino, com 5.773 registros (56,4%), enquanto o sexo masculino representou 4.456 casos (43,5%). Foram identificados ainda sete registros com informação ignorada.
+
+## 3.3 Distribuição dos casos por sexo
+
+```{r tabela_sexo}
+sexo
+```
+
+```{r grafico_sexo, fig.width=7, fig.height=5}
+ggplot(sexo_grafico,
+       aes(x = Sexo,
+           y = Valor,
+           fill = Sexo)) +
+  geom_col(width = 0.6) +
+  geom_text(
+    aes(label = paste0(Valor, "\n(", Percentual, ")")),
+    vjust = -0.3,
+    size = 3.5
+  ) +
+  scale_fill_manual(
+    values = c(
+      "Feminino" = "red",
+      "Masculino" = "blue",
+      "Ignorado" = "green"
+    )
+  ) +
+  scale_y_continuous(
+    expand = expansion(mult = c(0, 0.25))
+  ) +
+  labs(
+    title = "Casos de dengue por sexo nos municípios do Entorno do Distrito Federal, 2023",
+    x = "Sexo",
+    y = "Número de casos"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 12, face = "bold", hjust = 0.5),
+    legend.position = "none"
+  )
+```
+
+## 3.4 Distribuição dos casos por faixa etária
+
+A faixa etária de 20 a 39 anos concentrou o maior número de casos, com 4.394 registros (42,9%), seguida pelas faixas de 40 a 59 anos, com 2.352 casos (23,0%), e de 10 a 19 anos, com 1.768 casos (17,3%). A menor frequência foi observada entre indivíduos com 60 anos ou mais, com 730 casos (7,1%).
+
+```{r tabela_faixa_etaria}
+faixa_etaria
+```
+
+```{r grafico_faixa_etaria, fig.width=9, fig.height=5}
+ggplot(faixa_etaria,
+       aes(x = Faixa,
+           y = n)) +
+  geom_col(fill = "#2C7FB8") +
+  geom_text(
+    aes(label = paste0(n, "\n(", Percentual, "%)")),
+    vjust = -0.3,
+    size = 3
+  ) +
+  scale_y_continuous(
+    expand = expansion(mult = c(0, 0.30))
+  ) +
+  labs(
+    title = "Casos de dengue por faixa etária nos municípios do Entorno do Distrito Federal, 2023",
+    x = "Faixa etária",
+    y = "Número de casos"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 12, face = "bold", hjust = 0.5),
+    axis.title.x = element_text(size = 10, face = "bold"),
+    axis.title.y = element_text(size = 10, face = "bold"),
+    axis.text.x = element_text(size = 8)
+  )
+```
+
+
+
+## 3.5 Evolução temporal dos casos
+
+```{r tabela_evolucao_mensal}
+casos_mes_sintomas
+```
+
+```{r grafico_evolucao_mensal, fig.width=9, fig.height=5}
+ggplot(casos_mes_sintomas,
+       aes(x = Mes,
+           y = n,
+           group = 1)) +
+  geom_line(color = "blue", linewidth = 1) +
+  geom_point(color = "red", size = 3) +
+  geom_text(
+    aes(label = n),
+    vjust = -0.8,
+    size = 3
+  ) +
+  scale_y_continuous(
+    expand = expansion(mult = c(0, 0.15))
+  ) +
+  labs(
+    title = "Evolução temporal dos casos de dengue nos municípios do Entorno do Distrito Federal, 2023",
+    x = "Mês de início dos sintomas",
+    y = "Número de casos"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 12, face = "bold", hjust = 0.5)
+  )
+```
+
+A distribuição temporal dos casos evidenciou aumento progressivo entre janeiro e abril de 2023, período em que foi observado o primeiro pico de ocorrência da doença, com 1.315 casos registrados em abril. Após redução gradual entre maio e agosto, observou-se novo crescimento das notificações a partir de setembro, culminando em dezembro, mês que apresentou o maior número de casos registrados (2.170 casos).
+
+## 3.6 Classificação final dos casos
+
+```{r tabela_classificacao}
+classificacao %>%
+  gt() %>%
+  tab_header(
+    title = "Classificação final dos casos"
+  ) %>%
+  cols_label(
+    Classificacao = "Classificação final",
+    n = "Casos",
+    Percentual = "Percentual (%)"
+  )
+```
+
+A maior parte dos registros foi classificada como dengue, com 9.560 casos (93,4%). Foram registrados 648 casos inconclusivos (6,3%), 19 casos de dengue com sinais de alarme (0,2%) e seis casos de dengue grave (0,1%). Também foram identificados três registros sem informação preenchida.
+
+## 3.7 Critério de confirmação dos casos
+
+```{r tabela_criterio}
+criterio %>%
+  gt() %>%
+  tab_header(
+    title = "Critério de confirmação dos casos"
+  ) %>%
+  cols_label(
+    Criterio_Confirmacao = "Critério de confirmação",
+    n = "Casos",
+    Percentual = "Percentual (%)"
+  )
+```
+
+Observou-se predominância do critério clínico-epidemiológico para confirmação dos casos, responsável por 4.987 registros (48,7%). O critério laboratorial foi utilizado em 4.576 casos (44,7%), enquanto 673 notificações (6,6%) permaneceram em investigação ou não apresentavam informação preenchida.
+
+## 3.8 Hospitalização dos casos
+
+```{r tabela_hospitalizacao}
+hospitalizacao %>%
+  gt() %>%
+  tab_header(
+    title = "Hospitalização dos casos"
+  ) %>%
+  cols_label(
+    Hospitalizacao = "Hospitalização",
+    n = "Casos",
+    Percentual = "Percentual (%)"
+  )
+```
+
+Quanto à ocorrência de hospitalização, observou-se que a maioria dos casos não necessitou de internação hospitalar, correspondendo a 8.708 registros (85,1%). Foram identificados 171 casos hospitalizados (1,7%), enquanto 68 notificações foram classificadas como ignoradas e 1.289 não apresentavam informação preenchida para essa variável.
+
+## 3.9 Evolução dos casos
+
+```{r tabela_evolucao}
+evolucao %>%
+  gt() %>%
+  tab_header(
+    title = "Evolução dos casos"
+  ) %>%
+  cols_label(
+    Evolucao = "Evolução",
+    n = "Casos",
+    Percentual = "Percentual (%)"
+  )
+```
+
+Em relação à evolução dos casos, observou-se predominância de cura, registrada em 9.513 notificações (92,9%). Foram identificados sete óbitos por dengue, quatro óbitos por outras causas e dois óbitos em investigação. Registros classificados como ignorados corresponderam a 30 casos (0,3%), enquanto 680 notificações (6,6%) não apresentavam informação sobre a evolução do caso.
+
+# Considerações finais
+
+As análises realizadas nos municípios do Entorno do DF evidenciou que a doença está presente em todos os municipios, com maior concentração de casos nos municipios de Aguas Lindas de Goias, Luziania, Novo Gama e Formosa. 
+
+Existe uma predominancia de casos no sexo feminino e entre a faixa etária de 20-39 anos, o que demonstra um maior acometimento d população economicamente ativa. Além disso, ao longo do ano observou um aumento dos casos, com pico no mês de dezembro, período caracterizado por maior volume de chuvas na região.A maioria dos casos foi classificada como dengue e confirmada pelo critério clínico-epidemiológico, apresentando evolução para cura. 
+
+Os resultados reforçam a importância do monitoramento contínuo da dengue realizado pela Vigilância Epidemiológica, subsidiando a tomada de decisões e o direcionamento de ações nos locais com maior ocorrência da doença, bem como o fortalecimento das estratégias de vigilância, prevenção e controle. 
+
+Nesse contexto, destacam-se as ações de eliminação dos criadouros do mosquito Aedes aegypti, as atividades educativas voltadas à população, as visitas domiciliares realizadas pelos agentes de vigilância ambiental e a adoção de tecnologias complementares de controle, como a utilização de ovitrampas e a liberação de mosquitos Aedes aegypti infectados com a bactéria Wolbachia, estratégia que reduz a capacidade de transmissão dos vírus da dengue, chikungunya e zika.
